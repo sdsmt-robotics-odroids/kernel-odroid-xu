@@ -1,0 +1,79 @@
+From bca9345f6abe086f82166f96667ec9c56967c69d Mon Sep 17 00:00:00 2001
+From: Valentin Manea <valentin.manea@gmail.com>
+Date: Sun, 4 May 2014 11:52:28 +0300
+Subject: [PATCH] Fix HPD interrupt handling
+
+---
+ drivers/media/video/exynos/tv/Makefile        | 2 +-
+ drivers/media/video/exynos/tv/hdmi_drv.c      | 8 ++++----
+ drivers/media/video/exynos/tv/hdmi_edid.c     | 2 ++
+ drivers/media/video/exynos/tv/hdmi_reg_5xx0.c | 1 +
+ 4 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/video/exynos/tv/Makefile b/drivers/media/video/exynos/tv/Makefile
+index a91ed67..ad45620f 100644
+--- a/drivers/media/video/exynos/tv/Makefile
++++ b/drivers/media/video/exynos/tv/Makefile
+@@ -8,7 +8,7 @@
+ obj-$(CONFIG_VIDEO_EXYNOS_HDMIPHY) += s5p-hdmiphy.o
+ s5p-hdmiphy-y += hdmiphy_drv.o
+ obj-$(CONFIG_VIDEO_EXYNOS_HDMI) += s5p-hdmi.o
+-s5p-hdmi-y += hdcp_drv.o hdmi_drv.o hk_hdmi.o
++s5p-hdmi-y += hdcp_drv.o hdmi_drv.o hk_hdmi.o hdmi_edid.o
+ obj-$(CONFIG_VIDEO_EXYNOS_SDO) += s5p-sdo.o
+ s5p-sdo-y += sdo_drv.o
+ obj-$(CONFIG_VIDEO_EXYNOS_MIXER) += s5p-mixer.o
+diff --git a/drivers/media/video/exynos/tv/hdmi_drv.c b/drivers/media/video/exynos/tv/hdmi_drv.c
+index e03614c..c62ee72 100644
+--- a/drivers/media/video/exynos/tv/hdmi_drv.c
++++ b/drivers/media/video/exynos/tv/hdmi_drv.c
+@@ -680,11 +680,11 @@ static void hdmi_hpd_changed(struct hdmi_device *hdev, int state)
+ 
+ 	if (state) {
+ 		// we don't need to update, since data is static.
+-/*		ret = edid_update(hdev);
++		ret = edid_update(hdev);
+ 		if (ret == -ENODEV) {
+ 			dev_err(hdev->dev, "failed to update edid\n");
+ 			return;
+-		} */ 
++		}
+ 
+ 		preset = hdmi_get_v4l2_dv_id();
+ 
+@@ -711,8 +711,8 @@ static void hdmi_hpd_work(struct work_struct *work)
+ {
+ 	struct hdmi_device *hdev = container_of(work, struct hdmi_device,
+ 						hpd_work);
+-
+-	hdmi_hpd_changed(hdev, 0);
++	int state = s5p_v4l2_hpd_read_gpio();
++	hdmi_hpd_changed(hdev, state);
+ }
+ 
+ static void hdmiphy_poweroff_work(struct work_struct *work)
+diff --git a/drivers/media/video/exynos/tv/hdmi_edid.c b/drivers/media/video/exynos/tv/hdmi_edid.c
+index a8790de..18a31f6 100644
+--- a/drivers/media/video/exynos/tv/hdmi_edid.c
++++ b/drivers/media/video/exynos/tv/hdmi_edid.c
+@@ -35,6 +35,8 @@
+ #define EDID_3D_TB		6
+ #define EDID_3D_SBS		8
+ 
++#define pr_info printk
++
+ static struct i2c_client *edid_client;
+ 
+ /* Structure for Checking 3D Mandatory Format in EDID */
+diff --git a/drivers/media/video/exynos/tv/hdmi_reg_5xx0.c b/drivers/media/video/exynos/tv/hdmi_reg_5xx0.c
+index 14bc39d8..32e0a7b 100644
+--- a/drivers/media/video/exynos/tv/hdmi_reg_5xx0.c
++++ b/drivers/media/video/exynos/tv/hdmi_reg_5xx0.c
+@@ -2265,6 +2265,7 @@ irqreturn_t hdmi_irq_handler(int irq, void *dev_data)
+ 		if (intc_flag & HDMI_INTC_FLAG_HPD_PLUG) {
+ 			hdmi_write_mask(hdev, HDMI_INTC_FLAG_0, ~0,
+ 					HDMI_INTC_FLAG_HPD_PLUG);
++			queue_work(system_nrt_wq, &hdev->hpd_work);
+ 		}
+ 
+ 		if (intc_flag & HDMI_INTC_FLAG_HDCP) {

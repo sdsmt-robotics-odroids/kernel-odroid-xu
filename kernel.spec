@@ -30,7 +30,7 @@ Summary: The Linux kernel
 # For non-released -rc kernels, this will be appended after the rcX and
 # gitX tags, so a 3 here would become part of release "0.rcX.gitX.3"
 #
-%global baserelease 5
+%global baserelease 5.1
 %global fedora_build %{baserelease}
 
 # base_sublevel is the kernel version we're starting with and patching
@@ -406,6 +406,10 @@ Patch26121: Set-UID-in-sess_auth_rawntlmssp_authenticate-too.patch
 
 #rhbz 1163574
 Patch26130: acpi-video-Add-disable_native_backlight-quirk-for-De.patch
+
+Patch80000: exynos-fix-cec-waiting-for-correct-waitq.patch
+Patch80001: exynos-fix-hpd-interrupt-handling.patch
+Patch80002: exynos-fix-edid-log-printing.patch
 
 # END OF PATCH DEFINITIONS
 
@@ -1068,6 +1072,10 @@ ApplyPatch Set-UID-in-sess_auth_rawntlmssp_authenticate-too.patch
 
 #rhbz 1163574
 ApplyPatch acpi-video-Add-disable_native_backlight-quirk-for-De.patch
+
+ApplyPatch exynos-fix-cec-waiting-for-correct-waitq.patch
+ApplyPatch exynos-fix-hpd-interrupt-handling.patch
+ApplyPatch exynos-fix-edid-log-printing.patch
 
 # END OF PATCH APPLICATIONS
 
@@ -1844,6 +1852,9 @@ fi
 #                                    ||----w |
 #                                    ||     ||
 %changelog
+* Fri Apr 03 2015 Scott K Logan <logans@cottsay.net> - 3.4.104-5.1
+- Added vamanea's patches for HDMI EDID (specifically phy addr)
+
 * Fri Apr 03 2015 Scott K Logan <logans@cottsay.net> - 3.4.104-5
 - Adapted kernel RPM from Fedora's kernel-3.18.5-201
 ###
