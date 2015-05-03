@@ -1200,7 +1200,7 @@ BuildKernel() {
 
     %{make} -s ARCH=$Arch V=1 dtbs
     mkdir -p $RPM_BUILD_ROOT/%{image_install_path}/dtb-$KernelVer
-    if [ -f arc/$Arch/boot/dts/*.dtb ]; then
+    if [ -f arch/$Arch/boot/dts/*.dtb ]; then
       install -m 644 arch/$Arch/boot/dts/*.dtb $RPM_BUILD_ROOT/%{image_install_path}/dtb-$KernelVer/
       rm -f arch/$Arch/boot/dts/*.dtb
     fi
