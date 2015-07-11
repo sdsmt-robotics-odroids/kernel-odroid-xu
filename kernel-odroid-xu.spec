@@ -411,6 +411,9 @@ Patch80000: exynos-fix-cec-waiting-for-correct-waitq.patch
 Patch80001: exynos-fix-hpd-interrupt-handling.patch
 Patch80002: exynos-fix-edid-log-printing.patch
 
+Patch80100: gcc5.patch
+Patch80101: sec-dvfs-bad-shifts.patch
+
 # END OF PATCH DEFINITIONS
 
 %endif
@@ -1076,6 +1079,9 @@ ApplyPatch acpi-video-Add-disable_native_backlight-quirk-for-De.patch
 ApplyPatch exynos-fix-cec-waiting-for-correct-waitq.patch
 ApplyPatch exynos-fix-hpd-interrupt-handling.patch
 ApplyPatch exynos-fix-edid-log-printing.patch
+
+ApplyPatch gcc5.patch
+ApplyPatch sec-dvfs-bad-shifts.patch
 
 # END OF PATCH APPLICATIONS
 

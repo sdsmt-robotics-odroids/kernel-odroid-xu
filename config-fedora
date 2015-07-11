@@ -20,3 +20,7 @@ CONFIG_NET_NS=y
 # CONFIG_ODROIDXU_SP is not set
 # CONFIG_KEYBOARD_ODROID is not set
 # CONFIG_TOUCHSCREEN_SOLOMON_MT is not set
+
+# Disabled due to gcc5 errors
+# CONFIG_R8712U is not set
+# CONFIG_RTL8192CU_SDK is not set
