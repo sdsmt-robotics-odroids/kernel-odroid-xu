@@ -24,3 +24,6 @@ CONFIG_NET_NS=y
 # Disabled due to gcc5 errors
 # CONFIG_R8712U is not set
 # CONFIG_RTL8192CU_SDK is not set
+
+# Typo in odroidxu_ubutnu_defconfig
+# CONFIG_DVB_USB_RTL28XXU is not set

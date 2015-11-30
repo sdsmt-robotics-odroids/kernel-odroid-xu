@@ -1,4 +1,4 @@
-%global commit 41199e495e55245d28c09784067fc14846bd0f59
+%global commit 1295533c4c4eeedaabd55bc7c2d857003cb97f4a
 %define variant -odroid-xu
 %define _without_pae 1
 
@@ -30,7 +30,7 @@ Summary: The Linux kernel
 # For non-released -rc kernels, this will be appended after the rcX and
 # gitX tags, so a 3 here would become part of release "0.rcX.gitX.3"
 #
-%global baserelease 5.1
+%global baserelease 6
 %global fedora_build %{baserelease}
 
 # base_sublevel is the kernel version we're starting with and patching
@@ -468,13 +468,6 @@ Requires: gzip binutils
 Kernel-bootwrapper contains the wrapper code which makes bootable "zImage"
 files combining both kernel and initial ramdisk.
 
-%package debuginfo-common-%{_target_cpu}
-Summary: Kernel source files used by %{name}-debuginfo packages
-Group: Development/Debug
-%description debuginfo-common-%{_target_cpu}
-This package is required by %{name}-debuginfo subpackages.
-It provides the kernel source files common to all builds.
-
 %if %{with_perf}
 %package -n perf
 Summary: Performance monitoring for the Linux kernel
@@ -487,7 +480,6 @@ of the Linux kernel.
 %package -n perf-debuginfo
 Summary: Debug information for package perf
 Group: Development/Debug
-Requires: %{name}-debuginfo-common-%{_target_cpu} = %{version}-%{release}
 AutoReqProv: no
 %description -n perf-debuginfo
 This package provides debug information for the perf package.
@@ -511,7 +503,6 @@ to manipulate perf events.
 %package -n python-perf-debuginfo
 Summary: Debug information for package perf python bindings
 Group: Development/Debug
-Requires: %{name}-debuginfo-common-%{_target_cpu} = %{version}-%{release}
 AutoReqProv: no
 %description -n python-perf-debuginfo
 This package provides debug information for the perf python bindings.
@@ -563,7 +554,6 @@ the kernel source.
 %package -n kernel-tools-debuginfo
 Summary: Debug information for package kernel-tools
 Group: Development/Debug
-Requires: %{name}-debuginfo-common-%{_target_cpu} = %{version}-%{release}
 AutoReqProv: no
 %description -n kernel-tools-debuginfo
 This package provides debug information for package kernel-tools.
@@ -585,7 +575,6 @@ This package provides debug information for package kernel-tools.
 %package %{?1:%{1}-}debuginfo\
 Summary: Debug information for package %{name}%{?1:-%{1}}\
 Group: Development/Debug\
-Requires: %{name}-debuginfo-common-%{_target_cpu} = %{version}-%{release}\
 Provides: %{name}%{?1:-%{1}}-debuginfo-%{_target_cpu} = %{version}-%{release}\
 AutoReqProv: no\
 %description -n %{name}%{?1:-%{1}}-debuginfo\
@@ -1513,8 +1502,6 @@ popd
 
 %ifnarch noarch
 %global __debug_package 1
-%files -f debugfiles.list debuginfo-common-%{_target_cpu}
-%defattr(-,root,root)
 %endif
 
 %endif
@@ -1858,6 +1845,10 @@ fi
 #                                    ||----w |
 #                                    ||     ||
 %changelog
+* Sun Nov 29 2015 Scott K Logan <logans@cottsay.net> - 3.4.104-6
+- Pull latest source from Hardkernel
+- Remove debuginfo-common package because it is empty
+
 * Fri Apr 03 2015 Scott K Logan <logans@cottsay.net> - 3.4.104-5.1
 - Added vamanea's patches for HDMI EDID (specifically phy addr)
 
