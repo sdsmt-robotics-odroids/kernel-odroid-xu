@@ -1,4 +1,4 @@
-%global commit 1295533c4c4eeedaabd55bc7c2d857003cb97f4a
+%global commit fe533806adeaa87e57e55e9ebd168ef906531a17
 %define variant -odroid-xu
 %define _without_pae 1
 
@@ -30,7 +30,7 @@ Summary: The Linux kernel
 # For non-released -rc kernels, this will be appended after the rcX and
 # gitX tags, so a 3 here would become part of release "0.rcX.gitX.3"
 #
-%global baserelease 6
+%global baserelease 7
 %global fedora_build %{baserelease}
 
 # base_sublevel is the kernel version we're starting with and patching
@@ -413,6 +413,7 @@ Patch80002: exynos-fix-edid-log-printing.patch
 
 Patch80100: gcc5.patch
 Patch80101: sec-dvfs-bad-shifts.patch
+Patch80102: gcc6.patch
 
 # END OF PATCH DEFINITIONS
 
@@ -1071,6 +1072,7 @@ ApplyPatch exynos-fix-edid-log-printing.patch
 
 ApplyPatch gcc5.patch
 ApplyPatch sec-dvfs-bad-shifts.patch
+ApplyPatch gcc6.patch
 
 # END OF PATCH APPLICATIONS
 
@@ -1845,6 +1847,10 @@ fi
 #                                    ||----w |
 #                                    ||     ||
 %changelog
+* Sun Oct 09 2016 Scott K Logan <logans@cottsay.net> - 3.4.104-7
+- Pull latest source from Hardkernel
+- Add patch for gcc6 support
+
 * Sun Nov 29 2015 Scott K Logan <logans@cottsay.net> - 3.4.104-6
 - Pull latest source from Hardkernel
 - Remove debuginfo-common package because it is empty
