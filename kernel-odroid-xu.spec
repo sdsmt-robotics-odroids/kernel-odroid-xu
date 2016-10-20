@@ -30,7 +30,7 @@ Summary: The Linux kernel
 # For non-released -rc kernels, this will be appended after the rcX and
 # gitX tags, so a 3 here would become part of release "0.rcX.gitX.3"
 #
-%global baserelease 7.1
+%global baserelease 7.2
 %global fedora_build %{baserelease}
 
 # base_sublevel is the kernel version we're starting with and patching
@@ -289,6 +289,7 @@ Source96: filter-ppc64le.sh
 Source97: filter-s390x.sh
 Source98: filter-ppc64p7.sh
 Source99: filter-modules.sh
+Source100: filter-armv7hnl.sh
 %define modsign_cmd %{SOURCE18}
 
 Source19: Makefile.release
@@ -1860,6 +1861,9 @@ fi
 #                                    ||----w |
 #                                    ||     ||
 %changelog
+* Wed Oct 19 2016 Scott K Logan <logans@cottsay.net> - 3.4.104-7.2
+- Add module filter script for armv7hnl
+
 * Tue Oct 18 2016 Scott K Logan <logans@cottsay.net> - 3.4.104-7.1
 - Re-configure to produce proper debuginfo-common
 
